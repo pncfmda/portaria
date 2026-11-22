@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1120">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Portaria">
+<title>Portaria · Condomínio dos Pinheiros</title>
+<style>
+:root{
+  --bg:#0b1120; --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+  --txt:#f1f5f9; --mut:#94a3b8;
+  --blue1:#38bdf8; --blue2:#0369a1;
+  --orng1:#fb923c; --orng2:#c2410c;
+  --green:#4ade80;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100dvh;display:flex;flex-direction:column;
+  padding:max(18px,env(safe-area-inset-top)) 16px max(18px,env(safe-area-inset-bottom));
+  overflow-x:hidden;user-select:none;-webkit-user-select:none;
+}
+/* Fundo com luzes animadas */
+.aurora{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.aurora i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:flutua 14s ease-in-out infinite alternate}
+.aurora i:nth-child(1){width:320px;height:320px;background:#0ea5e9;top:-90px;left:-80px}
+.aurora i:nth-child(2){width:300px;height:300px;background:#f97316;bottom:-100px;right:-90px;animation-delay:-5s}
+.aurora i:nth-child(3){width:220px;height:220px;background:#22c55e;top:40%;left:55%;opacity:.25;animation-delay:-9s}
+@keyframes flutua{to{transform:translate(40px,30px) scale(1.15)}}
+
+/* Cabeçalho com ilustração */
+.topo{text-align:center;margin:6px 0 18px}
+.cena{width:100%;max-width:340px;height:auto;margin:0 auto 10px;display:block;
+  filter:drop-shadow(0 18px 24px rgba(0,0,0,.45))}
+h1{font-size:clamp(20px,6vw,24px);font-weight:800;letter-spacing:-.5px}
+.sub{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:12px;
+  color:var(--mut);text-transform:uppercase;letter-spacing:1.4px}
+.sub b{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulso 2s infinite}
+@keyframes pulso{70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+
+/* Botões */
+.botoes{display:flex;flex-direction:column;gap:14px;width:100%;max-width:420px;margin:0 auto;flex:1;justify-content:center}
+.btn{
+  position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;
+  padding:18px;min-height:112px;border-radius:24px;text-decoration:none;color:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 14px 30px -10px var(--sombra),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.btn::after{ /* brilho que passa */
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);
+  transform:translateX(-120%);animation:brilho 4.5s ease-in-out infinite;
+}
+.btn.carro::after{animation-delay:2.2s}
+@keyframes brilho{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.btn:active{transform:scale(.96);box-shadow:0 6px 14px -8px var(--sombra)}
+.pedestre{--sombra:rgba(14,165,233,.75);background:linear-gradient(135deg,var(--blue1),var(--blue2))}
+.carro{--sombra:rgba(249,115,22,.75);background:linear-gradient(135deg,var(--orng1),var(--orng2))}
+
+.ilus{flex:0 0 76px;height:76px;border-radius:20px;display:grid;place-items:center;
+  background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 8px 16px rgba(0,0,0,.18)}
+.ilus svg{width:52px;height:52px}
+.info{flex:1;text-align:left;position:relative;z-index:1}
+.info strong{display:block;font-size:19px;font-weight:800;letter-spacing:-.3px}
+.info span{display:block;font-size:13px;opacity:.85;margin-top:3px}
+.cod{font-size:13px;font-weight:800;padding:6px 10px;border-radius:999px;
+  background:rgba(0,0,0,.22);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);position:relative;z-index:1}
+
+/* Onda ao tocar */
+.onda{position:absolute;border-radius:50%;background:rgba(255,255,255,.45);
+  transform:scale(0);animation:onda .6s ease-out forwards;pointer-events:none}
+@keyframes onda{to{transform:scale(4);opacity:0}}
+
+/* Aviso */
+.aviso{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));
+  transform:translate(-50%,140%);display:flex;align-items:center;gap:10px;
+  padding:12px 18px;border-radius:16px;font-size:14px;font-weight:600;
+  background:rgba(15,23,42,.92);border:1px solid var(--line);
+  box-shadow:0 18px 40px rgba(0,0,0,.5);backdrop-filter:blur(10px);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.3);white-space:nowrap}
+.aviso.on{transform:translate(-50%,0)}
+.aviso i{width:10px;height:10px;border-radius:50%;background:var(--green);animation:pulso 1.2s infinite}
+
+.rodape{text-align:center;margin-top:18px;font-size:11px;color:#64748b;letter-spacing:.4px}
+
+@media (min-height:760px){.btn{min-height:128px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="aurora"><i></i><i></i><i></i></div>
+
+<header class="topo">
+  <!-- Ilustração: pinheiros + portão -->
+  <svg class="cena" viewBox="0 0 340 130" aria-hidden="true">
+    <defs>
+      <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e3a8a"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+      <linearGradient id="pin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4ade80"/><stop offset="1" stop-color="#15803d"/></linearGradient>
+      <linearGradient id="grade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#64748b"/></linearGradient>
+    </defs>
+    <rect x="0" y="0" width="340" height="130" rx="22" fill="url(#ceu)"/>
+    <circle cx="282" cy="30" r="13" fill="#fde68a" opacity=".9"/>
+    <circle cx="60" cy="22" r="1.4" fill="#fff"/><circle cx="120" cy="14" r="1" fill="#fff"/><circle cx="210" cy="24" r="1.2" fill="#fff"/>
+    <!-- pinheiros -->
+    <g fill="url(#pin)">
+      <path d="M38 104 60 40 82 104Z"/><path d="M14 108 34 58 54 108Z" opacity=".85"/>
+      <path d="M262 104 284 46 306 104Z"/><path d="M292 108 312 62 332 108Z" opacity=".85"/>
+    </g>
+    <rect x="57" y="104" width="6" height="8" fill="#78350f"/><rect x="281" y="104" width="6" height="8" fill="#78350f"/>
+    <!-- chão -->
+    <rect x="0" y="108" width="340" height="22" rx="0" fill="#1e293b"/>
+    <rect x="0" y="108" width="340" height="3" fill="#334155"/>
+    <!-- pilares -->
+    <rect x="96" y="44" width="16" height="66" rx="3" fill="#475569"/><rect x="228" y="44" width="16" height="66" rx="3" fill="#475569"/>
+    <rect x="93" y="40" width="22" height="7" rx="2" fill="#64748b"/><rect x="225" y="40" width="22" height="7" rx="2" fill="#64748b"/>
+    <circle cx="104" cy="36" r="4" fill="#fbbf24"/><circle cx="236" cy="36" r="4" fill="#fbbf24"/>
+    <!-- portão -->
+    <g stroke="url(#grade)" stroke-width="3" stroke-linecap="round">
+      <path d="M114 58H226M114 104H226"/>
+      <path d="M124 58V104M136 58V104M148 58V104M160 58V104M180 58V104M192 58V104M204 58V104M216 58V104"/>
+    </g>
+    <path d="M114 58Q170 40 226 58" fill="none" stroke="url(#grade)" stroke-width="3"/>
+    <rect x="160" y="62" width="20" height="38" rx="3" fill="#0ea5e9" opacity=".85"/>
+  </svg>
+  <h1>Condomínio dos Pinheiros</h1>
+  <div class="sub"><b></b> Portaria remota</div>
+</header>
+
+<main class="botoes">
+  <a href="tel:061996615523,*1" class="btn pedestre" data-msg="Abrindo portão de pedestres…">
+    <div class="ilus">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="34" cy="11" r="7" fill="#fff"/>
+        <path d="M30 22c-4 0-7 2-9 5l-6 10 5 3 5-8 2 0-5 20-7 8 4 4 9-10 3-8 6 6v14h6V49l-7-8 2-9c2 3 6 5 10 5v-6c-3 0-5-2-6-4l-3-5c-1-2-3-3-5-3z" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="info"><strong>Pedestres</strong><span>Toque para abrir</span></div>
+    <div class="cod">*1</div>
+  </a>
+
+  <a href="tel:061996615523,*2" class="btn carro" data-msg="Abrindo portão de carros…">
+    <div class="ilus">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 30l5-12c1-3 3-4 6-4h14c3 0 5 1 6 4l5 12" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+        <rect x="8" y="28" width="48" height="18" rx="6" fill="#fff"/>
+        <rect x="12" y="44" width="9" height="8" rx="3" fill="#fff"/><rect x="43" y="44" width="9" height="8" rx="3" fill="#fff"/>
+        <circle cx="18" cy="37" r="4" fill="#c2410c"/><circle cx="46" cy="37" r="4" fill="#c2410c"/>
+        <rect x="26" y="35" width="12" height="4" rx="2" fill="#c2410c" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="info"><strong>Carros</strong><span>Toque para abrir</span></div>
+    <div class="cod">*2</div>
+  </a>
+</main>
+
+<div class="rodape">Acesso remoto automático · Dica: adicione à tela inicial</div>
+<div class="aviso" id="aviso"><i></i><span id="avisoTxt"></span></div>
+
+<script>
+(function(){
+  var aviso=document.getElementById('aviso'),txt=document.getElementById('avisoTxt'),t;
+  document.querySelectorAll('.btn').forEach(function(b){
+    b.addEventListener('pointerdown',function(e){
+      var r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),o=document.createElement('span');
+      o.className='onda';o.style.width=o.style.height=s+'px';
+      o.style.left=(e.clientX-r.left-s/2)+'px';o.style.top=(e.clientY-r.top-s/2)+'px';
+      b.appendChild(o);setTimeout(function(){o.remove()},600);
+    });
+    b.addEventListener('click',function(){
+      if(navigator.vibrate)navigator.vibrate(35);
+      txt.textContent=b.dataset.msg;aviso.classList.add('on');
+      clearTimeout(t);t=setTimeout(function(){aviso.classList.remove('on')},3000);
+    });
+  });
+})();
+</script>
+</body>
+</html>
